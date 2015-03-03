@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>
+    Convert hex to base64
+  </title>
+</head>
+<body>
+  <p>
+    <h4>
+      Hex
+    </h4>
+    <textarea id="hex" name="hex" cols="30" rows="10"></textarea>
+  </p>
+  <p>
+    <h4>
+      Base64
+    </h4>
+    <textarea id="base64" name="base64" cols="30" rows="10"></textarea>
+  </p>
+  <p>
+    <button onclick="go()">Convert</button>
+  </p>
+  <script>
+  function go() {
+    document.getElementById("base64").value = hex2base64(document.getElementById("hex").value);
+  }
+  function hex2base64(hex_str) {
+    var b64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
+        b64_str = "",
+        num_triplets = Math.ceil(hex_str.length/6);
+    for (var i=0; i<num_triplets; i++) { // process 6 hex characters at a time
+      var triplet = hex_str.substr(i*6, 6); // that's three hex octets
+      while (triplet.length < 6) triplet += "0"; // pad with zeroes; we want 24 bits
+
+      var hex = parseInt(triplet, 16); // convert the hex string to binary
+      for (var j=0; j<4; j++) {     // loop over the binary,
+        var n = (hex&0xfc0000)>>18; // grabbing the top 6 bits at a time
+        b64_str += b64_chars.charAt(n); // and index into the base64 character list for the next character
+        hex = hex << 6; // remove those bits from the number
+      }
+    }
+    return b64_str;
+  }
+  </script>
+</body>
+</html>
