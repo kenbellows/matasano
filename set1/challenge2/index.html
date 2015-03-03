@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>
+    Perform a fixed=length XOR
+  </title>
+</head>
+<body>
+  <p>
+    <h4>
+      XOR Base
+    </h4>
+    <textarea id="base" name="base" cols="30" rows="10"></textarea>
+  </p>
+  <p>
+    <h4>
+      XOR Key
+    </h4>
+    <textarea id="key" name="key" cols="30" rows="10"></textarea>
+  </p>
+  <p>
+    <h4>
+      Ciphertext
+    </h4>
+    <textarea id="cipher" name="cipher" cols="30" rows="10"></textarea>
+  </p>
+  <p>
+    <button onclick="go()">Convert</button>
+  </p>
+  <script>
+  function go() {
+    document.getElementById("cipher").value = fixedXOR(document.getElementById("base").value, document.getElementById("key").value);
+  }
+  function fixedXOR(base_str, key_str) {
+    var num_pairs = Math.ceil(base_str.length/2),
+        cipher_str = "";
+    for (var i=0; i<num_pairs; i++) {
+      cipher_str += (parseInt(base_str.substr(i*2,2),16) ^ parseInt(key_str.substr(i*2,2), 16)).toString(16);
+    }
+    return cipher_str;
+  }
+  </script>
+</body>
+</html>
