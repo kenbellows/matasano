@@ -29,19 +29,22 @@
     document.getElementById("plain").value = decode(document.getElementById("cipher").value);
   }
   
+  function xor_strings(s,t) {
+    return (
+      zip(s,t).map(function(pair) {
+        return String.fromCharCode(
+          pair[0].charCodeAt(0) ^ pair[1].charCodeAt(0)
+        );
+      })
+    ).join('');
+  }
+  
   function decode(hex_cipher) {
     var cipher = hexDecode(hex_cipher),
         winner = "",
         winning_score = 0;
-    for (var xor_byte=0x20; xor_byte<0x7f; xor_byte++) {
-      var plaintext = "",
-          continue_flag = false;
-      for (var j=0; j<cipher.length; j++) {
-        var next_chr = cipher.charCodeAt(j)^xor_byte;
-        if (next_chr > 0x7e || next_chr < 0x20) { continue_flag = true; break; }
-        plaintext += String.fromCharCode(next_chr);
-      }
-      if (continue_flag) continue;
+    for (var xor_byte=65; xor_byte<=90; xor_byte++) {
+      var plaintext = xor_strings(cipher, String.fromCharCode(xor_byte))
       var this_score = score(plaintext);
       if (this_score > winning_score) {
         winning_score = this_score;
@@ -93,13 +96,21 @@
     return _score;
   }
   function hexDecode(hex_str) {
-    var num_chrs = hex_str.length/2,
-        str = "";
-    for (var i=0; i<num_chrs; i++) {
-      str += String.fromCharCode(parseInt(hex_str.substr(i,2),16));
-    }
+    var str = "";
+    for (var i=0; i<hex_str.length; i+=2) str += String.fromCharCode(parseInt(hex_str.substr(i,2),16));
     return str;
   }
+  
+  
+  function zip(a1, a2) {
+    var len = Math.max(a1.length, a2.length),
+        _a = [];
+    for (var i=0; i<len; i++) {
+      _a.push([a1[i%a1.length], a2[i%a2.length]])
+    }
+    return _a;
+  }
+
   </script>
   </body>
 </html>

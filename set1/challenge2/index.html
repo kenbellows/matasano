@@ -39,7 +39,10 @@
     var num_pairs = Math.ceil(base_str.length/2),
         cipher_str = "";
     for (var i=0; i<num_pairs; i++) {
-      cipher_str += (parseInt(base_str.substr(i*2,2),16) ^ parseInt(key_str.substr(i*2,2), 16)).toString(16);
+      cipher_str += (
+        parseInt(base_str.substr(i*2,2),16) ^
+        parseInt( key_str.substr(i*2,2),16)
+      ).toString(16);
     }
     return cipher_str;
   }
