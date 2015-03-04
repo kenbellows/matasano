@@ -26,7 +26,19 @@
   <div id="log"></div>
   <script>
   function go() {
-    document.getElementById("plain").value = decode(document.getElementById("cipher").value);
+    var winner = "",
+        winning_score = 0;
+    var ciphers = document.getElementById("cipher").value.split('\n');
+    ciphers.forEach(function(cipher){
+      var plaintext = decode(cipher.trim());
+      console.log(plaintext);
+      if (plaintext.score > winning_score) {
+        winner = plaintext.text;
+        winning_score = plaintext.score;
+      }
+    });
+    
+    document.getElementById("plain").value = winner;
   }
   
   function xor_strings(s,t) {
@@ -43,7 +55,7 @@
     var cipher = hexDecode(hex_cipher),
         winner = "",
         winning_score = 0;
-    for (var xor_byte=65; xor_byte<=90; xor_byte++) {
+    for (var xor_byte=65; xor_byte<=122; xor_byte++) {
       var plaintext = xor_strings(cipher, String.fromCharCode(xor_byte))
       var this_score = score(plaintext);
       if (this_score > winning_score) {
@@ -51,7 +63,7 @@
         winner = plaintext;
       }
     }
-    return winner;
+    return { text: winner, score: winning_score };
   }
   function log(s) { document.getElementById("log").innerHTML += "<p>"+s+"</p>"; }
   
